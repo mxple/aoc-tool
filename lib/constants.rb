@@ -9,6 +9,7 @@ $HELP_MSG = "\e[1m\e[4mUsage: aoc <COMMAND> [ARGS]\e[0m:
   \e[1mcreate-year\e[0m  <year> <dir_name>  Creates a year directory.
   \e[1mmaster-init\e[0m                     Initializes the master directory.
   \e[1minfo-dump\e[0m                       Prints a bunch of trouble-shooting info.
+  \e[1mconfig-gen\e[0m                      Print an example config file.
 
 Commands are smart. You don't have to enter all arguments, or even in the right order.
 Commands will do the most obvious(TM) thing if there are missing/weird parameters."
@@ -91,7 +92,8 @@ $INPUTS_WITH_SOLUTIONS = false
 
 # TODO add windos support :(
 $CONFIG_DIR = '/home/qy/.config/aoc'
+$CONFIG_DIR = File.expand_path($CONFIG_DIR)
+
 require '~/.config/aoc/config'
 
 $MASTER_DIR = File.expand_path($MASTER_DIR)
-$CONFIG_DIR = File.expand_path($CONFIG_DIR)

@@ -14,12 +14,12 @@ when 'i', 'init'
   Commands.init(year, day, name)
 when 's', 'submit'
   Commands.submit(year, day, name)
-when 'create'
-  Commands.create(year, day, name)
+when 'create-year'
+  Commands.create_year(year, day, name)
 when 'master-init'
   Commands.master_init(year, day, name)
-when 'make-config'
-  Commands.make_config
+when 'config-gen'
+  Commands.config_gen
 when 'info-dump'
   Commands.info_dump
 else

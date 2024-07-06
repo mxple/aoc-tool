@@ -45,7 +45,7 @@ def build_solution_dir(year, day)
 end
 
 def build_input_dir(year, day)
-  return File.join(get_year_dir(year), 'solutions', f02(day), '/') unless $INPUTS_WITH_SOLUTIONS.nil?
+  return File.join(get_year_dir(year), 'solutions', f02(day), '/') if $INPUTS_WITH_SOLUTIONS
 
   File.join(get_year_dir(year), 'inputs/')
 end
@@ -59,7 +59,7 @@ def build_solution_file(year, day, part, ext)
 end
 
 def build_input_file(year, day)
-  return File.join(get_year_dir(year), 'solutions', f02(day), 'input.txt') unless $INPUTS_WITH_SOLUTIONS.nil?
+  return File.join(get_year_dir(year), 'solutions', f02(day), 'input.txt') if $INPUTS_WITH_SOLUTIONS
 
   File.join(get_year_dir(year), 'inputs', f02(day)+'.txt')
 end
@@ -114,5 +114,5 @@ def most_recent_aoc_year
 end
 
 def in_year_dir
-  File.exist?('.aoc')
+  File.exist?('.aoc_year')
 end

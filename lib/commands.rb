@@ -139,7 +139,7 @@ module Commands
     abort('Submit not yet implemented!')
   end
 
-  def self.create(year, day, name)
+  def self.create_year(year, day, name)
     abort('Specify a valid year! Usage: `create` <year> <dir_name') if year.nil?
     abort('Too many arguments! Usage: `create` <year> <dir_name>') if day && name
     abort('Too few arguments! Usage: `create` <year> <dir_name>') if day.nil? && name.nil?
@@ -156,7 +156,7 @@ module Commands
     end
 
     # create .aoc file in year directory
-    File.open(File.join(year_dir, '.aoc'), 'w').write(year.to_s)
+    File.open(File.join(year_dir, '.aoc_year'), 'w').write(year.to_s)
 
     # update master dir .aoc file
     $MASTER_DIR && File.open(File.join($MASTER_DIR, '.aoc'), 'a').write("\n#{year}:#{name}")
@@ -182,7 +182,7 @@ module Commands
   # this function fixes it based on the .aoc files in its chilren dirs
   def reinit_master; end
   
-def self.make_config
+def self.config_gen
     puts "# Example configuration file. Typically stored as ~/.config/aoc/config.rb
 # If you ever break your config, you can generate a new one with `aoc make-config > config.rb`
 
