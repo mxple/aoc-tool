@@ -13,6 +13,9 @@ module Commands
     times   = []
     part.each do |pt| outputs[pt - 1], times[pt - 1] = run_part(year, day, pt); end
 
+    # cache run results
+    Metadata.cache_results(year, day, outputs[0], outputs[1])
+
     present_run(year, day, outputs[0], outputs[1], times[0], times[1])
   end
 

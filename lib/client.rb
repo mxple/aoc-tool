@@ -31,8 +31,4 @@ module AocClient
     est > time
   end
 
-  def cookie()
-    return $SESSION unless $SESSION.nil?
-    ENV['AOC_COOKIE']
-  end
 end

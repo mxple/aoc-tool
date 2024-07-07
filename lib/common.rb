@@ -32,6 +32,7 @@ def validate_config
   # TODO: extra validation. for now, just fail/ub if the user enters atrocities.
 end
 
+# TODO: add error checking?
 def default_year
   return File.readlines('.aoc_year')[0].strip.to_i if in_year_dir
 
@@ -126,6 +127,11 @@ def most_recent_aoc_year
   return est.year if est.month == 12
 
   est.year - 1
+end
+
+def cookie
+  return $SESSION unless $SESSION.nil?
+  ENV['AOC_COOKIE']
 end
 
 def in_year_dir
