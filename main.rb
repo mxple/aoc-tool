@@ -7,6 +7,8 @@ ARGV.empty? && abort($HELP_MSG)
 
 year, day, name = parse_problem(ARGV)
 
+validate_config if ARGV[0] != 'config-gen'
+
 case ARGV[0]
 when 'r', 'run'
   Commands.run(year, day, name)
