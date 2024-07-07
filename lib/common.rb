@@ -71,12 +71,6 @@ def build_binary_dir(year, pt)
   File.join(year_dir(year), 'binaries', pt.to_s)
 end
 
-# def find_binary_file(year, part)
-#   dir = File.join(year_dir(year), 'binaries', part.to_i)
-#   file = Dir.entries('.').find { |f| File.file?(f) }.first
-#   File.join(dir, file)
-# end
-
 def day_dir(day)
   $DAY_DIRECTORY_NAME.gsub('%%DAY%%', f02(day))
 end
@@ -136,6 +130,26 @@ end
 
 def in_year_dir
   File.exist?('.aoc_year')
+end
+
+def error(msg)
+  puts "#{'[AOC-ERROR]'.red!} #{msg}"
+  exit 1
+end
+
+def warn(msg)
+  puts "#{'[AOC-WARN]'.yellow!} #{msg}"
+end
+
+def info(msg)
+  puts "#{'[AOC-INFO]'.bright_white!} #{msg}"
+end
+
+def debug(msg)
+  return unless ENV['AOC_DEBUG']
+
+  print "[AOC-DEBUG] "
+  p msg
 end
 
 class String

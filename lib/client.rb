@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 
+require_relative 'common'
 require_relative 'constants'
 
 module AocClient
@@ -13,13 +14,13 @@ module AocClient
     request = Net::HTTP::Get.new(url.request_uri)
     request['Cookie'] = "session=#{cookie}"
 
-    puts "Fetching input for day #{day}, #{year}..."
+    info "Fetching puzzle for #{'Day'.bright_green!} #{day.to_s.red!} #{year.to_s.bright_white!}..."
     response = http.request(request)
 
     return response.body if response.code == '200'
 
-    abort("Server returned with code #{response.code}\n#{response.body} \
-\nCould not download input! Make sure the session cookie is correct.")
+    error "Server returned with code #{response.code}\n#{response.body} \
+\n#{'Could not download input! Make sure the session cookie is correct.'.bold!}"
   end
 
   module_function

@@ -33,13 +33,17 @@ module Language
   def self.get_compiler(lang)
     lang = self.get_lang(lang) if lang.is_a?(String) 
 
-    COMPILER_MAP[lang] ? COMPILER_MAP[lang] : ''
+    COMPILER_MAP[lang] ? COMPILER_MAP[lang] : nil
   end
 
   def self.get_run_cmd(lang)
     lang = self.get_lang(lang) if lang.is_a?(String)
 
     RUN_CMD_MAP[lang] ? RUN_CMD_MAP[lang] : ''
+  end
+
+  def self.is_compiled?(lang)
+    return self.get_compiler(lang)
   end
 
   def self.dump

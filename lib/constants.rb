@@ -115,4 +115,4 @@ $CONFIG_DIR = File.expand_path($CONFIG_DIR)
 
 require File.join($CONFIG_DIR, 'config.rb')
 
-$MASTER_DIR = File.expand_path($MASTER_DIR)
+$MASTER_DIR = File.expand_path($MASTER_DIR) if $MASTER_DIR
