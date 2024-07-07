@@ -1,8 +1,8 @@
 module Commands
   def self.create_year(year, day, name)
-    error('Specify a valid year! Usage: `create` <year> <dir_name') if year.nil?
-    error('Too many arguments! Usage: `create` <year> <dir_name>') if day && name
-    error('Too few arguments! Usage: `create` <year> <dir_name>') if day.nil? && name.nil?
+    error('Specify a valid year! Usage: `init-year` <year> <dir_name') if year.nil?
+    error('Too many arguments! Usage: `init-year` <year> <dir_name>') if day && name
+    error('Too few arguments! Usage: `init-year` <year> <dir_name>') if day.nil? && name.nil?
     name = day if name.nil?
 
     # create directory

@@ -1,6 +1,6 @@
 module Commands
   def self.init(year, day, lang)
-    $MASTER_DIR.nil? && !in_year_dir && error('`init` may only be used in a year directory or if $MASTER_DIR is defined')
+    # $MASTER_DIR.nil? && !in_year_dir && error('`create` may only be used in a year directory or if $MASTER_DIR is defined')
     # none      -> year = aoc_year, day = today (est)
     # just year -> abort, no info to go off of
     # just day  -> year = aoc_year, day = day

@@ -1,13 +1,13 @@
 $HELP_MSG = "\e[1m\e[4mUsage: aoc <COMMAND> [ARGS]\e[0m:
 \e[1m\e[4mCommon Commands\e[0m:
   \e[1m\e[4mr\e[0m\e[1mun\e[0m       [year] [day] [part]   Runs the solution on an input.
-  \e[1m\e[4mi\e[0m\e[1mnit\e[0m      [year] [day] [lang]   Gets the input for a problem, makes solution files, and opens a workspace.
+  \e[1m\e[4mc\e[0m\e[1mreate\e[0m    [year] [day] [lang]   Gets the input for a problem, makes solution files, and opens a workspace.
   \e[1m\e[4ms\e[0m\e[1mubmit\e[0m    [year] [day] [ans]    Submits the specified answer, or runs the solution and submits the output.
-  \e[1m\e[4mt\e[0m\e[1mest\e[0m      [year] [day] [part]   Same as `run` but uses 'test_input.txt' as the input.
+  \e[1m\e[4mt\e[0m\e[1mest\e[0m      [year] [day] [part]   Same as `run` but uses test cases as input.
 
 \e[1m\e[4mSetup Commands\e[0m:
-  \e[1mcreate-year\e[0m  <year> <dir_name>  Creates a year directory.
-  \e[1mmaster-init\e[0m                     Initializes the master directory.
+  \e[1minit-year\e[0m    <year> <dir_name>  Creates a year directory.
+  \e[1minit-master\e[0m                     Initializes the master directory.
   \e[1minfo-dump\e[0m                       Prints a bunch of trouble-shooting info.
   \e[1mconfig-gen\e[0m                      Print an example config file.
 
