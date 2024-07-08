@@ -22,6 +22,8 @@ module Commands
     # http GET
     input = AocClient.get_input(day, year)
 
+    Metadata.set_last_puzzle(year, day)
+
     # create input file
     FileUtils.mkdir_p(input_file_dir)
     File.open(input_file_path, 'w').write(input)

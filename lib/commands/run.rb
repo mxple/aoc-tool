@@ -3,18 +3,17 @@ require 'benchmark'
 module Commands 
   def self.run(year, day, part)
     $MASTER_DIR.nil? && !in_year_dir && error('`run` may only be used in an year directory or if $MASTER_DIR is defined')
-    year && day.nil? && error('Unable to run for unknown day!') # todo, change this
+    year && day.nil? && error('Cannot figure out which day to run.') # todo, change this
 
+    year, day = Metadata.last_puzzle if year.nil? && day.nil?
     year = default_year if year.nil?
-    day  = Time.now.getlocal('-05:00').day if day.nil?
     part = parse_part(part)
+
+    error('Cannot figure out which day to run.') if day.nil?
 
     outputs = []
     times   = []
     part.each do |pt| outputs[pt - 1], times[pt - 1] = run_part(year, day, pt); end
-
-    # cache run results
-    Metadata.cache_results(year, day, outputs[0], outputs[1])
 
     present_run(year, day, outputs[0], outputs[1], times[0], times[1])
   end
@@ -99,21 +98,37 @@ module Commands
     end
   end
 
+
   def present_run(year, day, out1, out2, time1, time2)
-    out1 = out1.split("\n") unless out1.nil?
-    out2 = out2.split("\n") unless out2.nil?
-    
-    out1 << '' if out1 && out1.empty?
-    out2 << '' if out2 && out2.empty?
+    truncated = false
+    [out1, out2].each_with_index do |out, index| 
+      next if out.nil?
+
+      out = out.split("\n")
+      
+      truncated = true if out.size > 1
+      out = out.empty? ? '' : out.last 
+      truncated = true if out.visible_length > 67
+      out = "#{out[0, 64]}#{'...'.red!}" if out.visible_length > 67
+
+      if index == 0 
+        out1 = out
+        Metadata.cache_results(year, day, out1, nil) unless truncated
+      else 
+        out2 = out
+        Metadata.cache_results(year, day, nil, out2) unless truncated
+      end
+    end
 
     table_left = '+--------+'
-    table_center = '-' * [(out1 ? out1.map(&:visible_length).max : 0) + 4, (out2 ? out2.map(&:visible_length).max : 0) + 4, 10].max
+    table_center = '-' * [(out1 ? out1.visible_length : 0) + 4, (out2 ? out2.visible_length : 0) + 4, 10].max
     table_right = '+-------------+'
-
     seperator_row = table_left + table_center + table_right
 
+    warn 'Your output has been truncated. Run with `aoc run-raw` to get raw stdout without the pretty formatting.' if truncated
+
     puts '-' * seperator_row.length
-    puts "Run results for Year #{year}, Day #{day}" 
+    info "Run results for Year #{year}, Day #{day}" 
     puts ''
 
     puts seperator_row
@@ -124,12 +139,9 @@ module Commands
       next if out.nil?
 
       exec_time = "#{(time * 1000).round(2)} ms"
-      out.each_with_index do |line, i|
-        print_info = i == (out.length + 1) / 2 - 1  # print info on middle line
-        print "|  #{print_info ? pt.to_s : ' '}     |"
-        print "  #{line}#{' ' * (table_center.length - line.visible_length - 2)}"
-        puts "|  #{print_info ? exec_time : ' ' * exec_time.length}#{' ' * (table_right.length - exec_time.length - 4)}|"
-      end
+      print "|  #{pt.to_s}     |"
+      print "  #{out}#{' ' * (table_center.length - out.visible_length - 2)}"
+      puts "|  #{exec_time}#{' ' * (table_right.length - exec_time.length - 4)}|"
       puts seperator_row
     end
   end

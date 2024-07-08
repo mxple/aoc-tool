@@ -91,9 +91,10 @@ def year_dir(year)
   year = default_year if year.nil?
 
   unless $MASTER_DIR.nil?
-    !File.exist?(File.join($MASTER_DIR, '.aoc')) && abort('Master directory is missing \'.aoc\' file! Run `aoc master-init` to initialize the master directory.')
-    year_dir = parse_aoc(File.read(File.join($MASTER_DIR, '.aoc')))[year.to_s]
-    year_dir.nil? && abort("No year directory found for #{year}. Initialize one with `aoc create <year> <directory>`")
+    !File.exist?(File.join($MASTER_DIR, '.aoc')) && error('Master directory is missing \'.aoc\' file! Run `aoc master-init` to initialize the master directory.')
+    year_dir = Metadata.year_dir(year)
+
+    year_dir.nil? && error("No year directory found for #{year}. Initialize one with `aoc create <year> <directory>`")
     return File.join($MASTER_DIR, year_dir)
   end
 
@@ -102,20 +103,6 @@ end
 
 def most_recent_dir(year)
   Dir.glob("#{year_dir(year)}/*").select { |f| File.directory?(f) && /\d/.match?(f) }.max_by { |f| File.mtime(f) }
-end
-
-def parse_aoc(contents)
-  aoc = {}
-  contents
-    .split("\n")
-    .map(&:strip)
-    .select { |l| !l.empty? && l[0] != '#' }
-    .map(&:strip)
-    .map { |l| l.split(':').map(&:strip) }
-    .each do |kv|
-      aoc[kv[0]] = kv[1]
-    end
-  aoc
 end
 
 def f02(i)
