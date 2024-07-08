@@ -1,6 +1,6 @@
 # year day etc
 def parse_problem(argv)
-  abort("Too many arguments!\n#{$HELP_MSG}") if argv.length > 4
+  error("Too many arguments!\n#{$HELP_MSG}") if argv.length > 4
 
   ret = [nil, nil, nil]
 
@@ -25,9 +25,9 @@ def parse_problem(argv)
 end
 
 def validate_config
-  !$DAY_DIRECTORY_NAME.include?('%%DAY%%') && abort("Config error: Config value $DAY_DIRECTORY_NAME must include '%%DAY%%'")
-  !$SOLUTION_FILE_NAME.include?('%%PART%%') && abort("Config error: Config value $SOLUTION_FILE_NAME must include '%%PART%%'")
-  !$INPUT_FILE_NAME.include?('%%DAY%%') && !$INPUTS_WITH_SOLUTIONS && abort("Config error: Config value $INPUT_FILE_NAME must include '%%DAY%%' when $INPUTS_WITH_SOLUTIONS is false")
+  !$DAY_DIRECTORY_NAME.include?('%%DAY%%') && error("Config error: Config value $DAY_DIRECTORY_NAME must include '%%DAY%%'")
+  !$SOLUTION_FILE_NAME.include?('%%PART%%') && error("Config error: Config value $SOLUTION_FILE_NAME must include '%%PART%%'")
+  !$INPUT_FILE_NAME.include?('%%DAY%%') && !$INPUTS_WITH_SOLUTIONS && error("Config error: Config value $INPUT_FILE_NAME must include '%%DAY%%' when $INPUTS_WITH_SOLUTIONS is false")
 
   # TODO: extra validation. for now, just fail/ub if the user enters atrocities.
 end
@@ -44,7 +44,7 @@ def parse_part(part)
   return [2]    if %w[2 two p2 P2 part2 Part2 part_2 Part_2].include?(part)
   return [1, 2] if %w[12 both all].include?(part) || part.nil?
 
-  abort("Unable to parse argument as part: '#{part}'")
+  error("Unable to parse argument as part: '#{part}'")
 end
 
 # path builders
@@ -98,7 +98,7 @@ def year_dir(year)
     return File.join($MASTER_DIR, year_dir)
   end
 
-  abort("No year directory found for #{year}. Initialize one with `aoc create <year> <directory>`")
+  error("No year directory found for #{year}. Initialize one with `aoc create <year> <directory>`")
 end
 
 def most_recent_dir(year)
