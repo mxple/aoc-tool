@@ -1,5 +1,5 @@
 module Commands
-  def self.master_init(year, day, name)
+  def self.init_master(year, day, name)
     error('`aoc init-master` takes no arguments!') if year || day || name
     error('$MASTER_DIR is nil! Make sure to define it in your config!') if $MASTER_DIR.nil?
     Dir.exist?($MASTER_DIR) && File.exist?(File.join($MASTER_DIR,

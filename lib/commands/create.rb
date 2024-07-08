@@ -1,5 +1,5 @@
 module Commands
-  def self.init(year, day, lang)
+  def self.create(year, day, lang)
     # $MASTER_DIR.nil? && !in_year_dir && error('`create` may only be used in a year directory or if $MASTER_DIR is defined')
     # none      -> year = aoc_year, day = today (est)
     # just year -> abort, no info to go off of
