@@ -17,7 +17,7 @@ $ git clone https://github.com/mxple/aoc-tool  # somewhere safe
 $ cd aoc-tool
 $ ln -s $(pwd)/bin/aoc.rb /usr/bin/aoc
 ```
-
+<!--
 From AUR:
 ```
 $ yay -S aoc-tool
@@ -27,7 +27,7 @@ From Gems
 ```
 $ gem install aoc-tool
 ```
-
+-->
 Windows people, use WSL until Windows is officially supported :p
 
 ## Getting Started
