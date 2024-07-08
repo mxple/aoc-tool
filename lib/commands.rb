@@ -2,9 +2,8 @@ require 'fileutils'
 
 require_relative 'constants'
 require_relative 'common'
-require_relative 'client'
 
-require_relative 'metadata/metadata'
+require_relative 'metadata'
 
 require_relative 'commands/create'
 require_relative 'commands/edit'

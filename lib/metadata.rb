@@ -42,6 +42,10 @@ module Metadata
     [@meta['last_run_year'], @meta['last_run_day']]
   end
 
+  def self.load
+    deserialize
+  end
+
   module_function
   def deserialize
     check_metafile_exists
@@ -65,11 +69,13 @@ module Metadata
 
     aoc_path = File.join($MASTER_DIR, '.aoc')
 
-    File.open(aoc_path, 'w').write('') # clear
+    f = File.open(aoc_path, 'w')
 
     @meta.each do |k, v|
-      File.open(aoc_path, 'a').write("#{k}:#{v}\n")
+      f.write("#{k}:#{v}\n")
     end
+
+    f.close
   end
 
   def check_metafile_exists

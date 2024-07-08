@@ -1,6 +1,7 @@
-require_relative 'lib/commands'
-require_relative 'lib/constants'
-require_relative 'lib/common'
+#!/usr/bin/env ruby
+require_relative '../lib/commands'
+require_relative '../lib/constants'
+require_relative '../lib/common'
 
 # Parse args
 ARGV.empty? && abort($HELP_MSG)

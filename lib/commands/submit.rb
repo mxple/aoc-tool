@@ -19,7 +19,6 @@ module Commands
     return unless confirm_submit?(year, day, part, ans)
 
     url = URI.parse("https://adventofcode.com/#{year}/day/#{day}/answer")
-    # form_data = URI.encode_www_form(level: part.to_s, answer: ans.to_s)
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -35,7 +34,7 @@ module Commands
 
     html_response = response.body
 
-    puts replace_stars(replace_links(extract_msg(html_response)))
+    puts html_response.extract_main.extract_articles[0][0].replace_paragraph_md!.replace_links!.replace_stars!
   end
 
   module_function
@@ -67,19 +66,5 @@ module Commands
     end
 
     response.body.include?('<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>') ? 2 : 1
-  end
-
-  def replace_links(text)
-    regex = /<a href=[^>]+>([^<]+)<\/a>/
-    text.gsub(regex) do |link| regex.match(link)[1].blue!; end
-  end
-
-  def extract_msg(text)
-    regex = /<main>\n<article><p>(.*?)<\/p>/
-    regex.match(text)[1]
-  end
-
-  def replace_stars(text)
-    text.gsub!("<span class=\"day-success\">one gold star</span>", 'one gold star'.bright_yellow!)
   end
 end
