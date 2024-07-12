@@ -1,6 +1,8 @@
 require 'net/http'
 require 'uri'
 
+require_relative '../parser'
+
 module Commands 
   def self.submit(year, day, ans)
     error('Cannot specify year without specifying day.') if year && day.nil?
@@ -32,9 +34,10 @@ module Commands
       error "POST request failed with code: #{response.code}"
     end
 
-    html_response = response.body
+    html_parser = Parser.new(response.body)
+    article_parser = Parser.new(html_parser.extract_main!.extract_articles[0])
 
-    puts html_response.extract_main.extract_articles[0][0].replace_paragraph_md!.replace_links!.replace_stars!
+    puts article_parser.replace_paragraph_md!.replace_links!.replace_stars!.replace_guess!.get_str
   end
 
   module_function

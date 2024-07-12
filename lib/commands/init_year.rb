@@ -1,13 +1,13 @@
 module Commands
-  def self.init_year(year, day, name)
+  def self.init_year(year, day, etc)
     error('Specify a valid year! Usage: `init-year` <year> <dir_name') if year.nil?
-    error('Too many arguments! Usage: `init-year` <year> <dir_name>') if day && name
-    error('Too few arguments! Usage: `init-year` <year> <dir_name>') if day.nil? && name.nil?
-    name = day if name.nil?
+    error('Too many arguments! Usage: `init-year` <year> <dir_name>') if day && etc
+    error('Too few arguments! Usage: `init-year` <year> <dir_name>') if day.nil? && etc.nil?
+    etc = day if etc.nil?
 
     # create directory
     base = $MASTER_DIR || './'
-    year_dir = File.join(base, name)
+    year_dir = File.join(base, etc)
 
     begin
       Dir.mkdir(year_dir)

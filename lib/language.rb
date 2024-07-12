@@ -6,18 +6,18 @@ module Language
   COMPILER_MAP  = []
   RUN_CMD_MAP   = []
 
-  def self.add(name, extension, compile_cmd, interpreter)
-    name = name.downcase
+  def self.add(etc, extension, compile_cmd, run_cmd)
+    etc = etc.downcase
 
-    unless LANG_TO_ID[name]
-      LANG_TO_ID[name] = @language_id
+    unless LANG_TO_ID[etc]
+      LANG_TO_ID[etc] = @language_id
       LANG_TO_ID[extension.downcase] = @language_id
       EXTENSION_MAP[@language_id] = extension.downcase
       @language_id += 1
     end
 
-    COMPILER_MAP[LANG_TO_ID[name]] = compile_cmd unless compile_cmd.nil?
-    RUN_CMD_MAP[LANG_TO_ID[name]]  = interpreter unless interpreter.nil?
+    COMPILER_MAP[LANG_TO_ID[etc]] = compile_cmd unless compile_cmd.nil?
+    RUN_CMD_MAP[LANG_TO_ID[etc]]  = run_cmd unless run_cmd.nil?
   end
 
   def self.get_lang(string)
@@ -43,7 +43,7 @@ module Language
   end
 
   def self.is_compiled?(lang)
-    return self.get_compiler(lang)
+    return !self.get_compiler(lang).nil?
   end
 
   def self.dump

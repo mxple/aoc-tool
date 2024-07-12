@@ -1,11 +1,11 @@
 require 'benchmark'
 
-module Commands 
+module Commands
   def self.run(year, day, part)
     $MASTER_DIR.nil? && !in_year_dir && error('`run` may only be used in an year directory or if $MASTER_DIR is defined')
     year && day.nil? && error('Cannot figure out which day to run.') # todo, change this
 
-    year, day = Metadata.last_puzzle if year.nil? && day.nil?
+    year, day, lang_code = Metadata.last_puzzle if year.nil? && day.nil?
     year = default_year if year.nil?
     part = parse_part(part)
 
@@ -13,25 +13,18 @@ module Commands
 
     outputs = []
     times   = []
-    part.each do |pt| outputs[pt - 1], times[pt - 1] = run_part(year, day, pt); end
+    part.each { |pt| outputs[pt - 1], times[pt - 1] = run_part(year, day, pt) }
 
     present_run(year, day, outputs[0], outputs[1], times[0], times[1])
   end
 
   module_function
 
-  def run_part(year, day, pt) 
-    solution_dir = build_solution_dir(year, day)
-    solution_file = File.join(solution_dir, Dir.entries(solution_dir).select do |f|
-                                              Language::EXTENSION_MAP.any? do |suf|
-                                                f.end_with?(suf)
-                                              end
-                                            end.find { |f| f.split('.')[-2].chars.last.to_i == pt })
-    !File.exist?(solution_file) && error("Solution file: '#{solution_file}' does not exist.")
+  def run_part(year, day, pt)
+    solution_dir  = build_solution_dir(year, day)
+    solution_file = find_solution_file(solution_dir, pt)
 
-    # get input
-    input_file = build_input_file(year, day)
-    !File.exist?(input_file) && error("Input file: '#{input_file}' does not exist.")
+    return warn("Solution file for Part #{pt.to_s.bold!} does not exist.") if solution_file.nil?
 
     ext = solution_file.split('.').last
     lang = Language.get_lang(ext)
@@ -40,29 +33,62 @@ module Commands
     binary_dir = build_binary_dir(year, pt)
 
     # compile
-    if Language.is_compiled?(lang) 
+    if Language.is_compiled?(lang)
       compile_success = compile(lang, binary_dir, solution_file)
       return ['COMPILE_ERROR'.red!, 0] unless compile_success
     end
 
-    # feed input
+    # grab and feed input
+    input_file = build_input_file(year, day)
+    !File.exist?(input_file) && error("Input file: '#{input_file}' does not exist.")
+
     aoc_input = File.read(input_file)
     ENV['AOC_INPUT'] = aoc_input if $USE_ENV_INPUT
 
-    run_file = Language.is_compiled?(lang) ? Dir.glob(File.join(binary_dir, '*')).first : solution_file
-    run_cmd = "#{Language.get_run_cmd(lang)} #{run_file} #{$USE_STDIN_INPUT ? "< #{input_file}" : ''}"
+    # prepare run command
+    run_cmd = build_run_cmd(binary_dir, solution_file, input_file, lang)
+    return if run_cmd.nil?
 
     debug "Running solution with: #{run_cmd}"
 
     output = nil
-    exec_time = Benchmark.realtime do output = `#{run_cmd}`; end
+    exec_time = Benchmark.realtime { output = `#{run_cmd}` }
 
     unless $?.success?
       warn "Error code detected!\n#{output}"
-      output = "RUNTIME_ERROR".red!
+      output = 'RUNTIME_ERROR'.red!
     end
 
-    return [output, exec_time]
+    [output, exec_time]
+  end
+
+  def build_run_cmd(bin_dir, solution_file, input_file, lang)
+    run_file_path = Language.is_compiled?(lang) ? Dir.glob(File.join(bin_dir, '*')).first : solution_file
+    return nil if run_file_path.nil? # javac workaround
+
+    run_file_name = File.basename(run_file_path)
+    run_file_base = run_file_name.split('.').first
+
+    run_cmd = "#{Language.get_run_cmd(lang)} #{$USE_STDIN_INPUT ? "< #{input_file}" : ''}"
+    run_cmd.gsub!('%%BIN_DIR%%', bin_dir)
+    run_cmd.gsub!('%%RUN_FILE_PATH%%', run_file_path)
+    run_cmd.gsub!('%%RUN_FILE_NAME%%', run_file_name)
+    run_cmd.gsub!('%%RUN_FILE_BASE%%', run_file_base)
+    run_cmd
+  end
+
+  def find_solution_file(dir, part)
+    !File.exist?(dir) && error("Solution directory #{dir.bold!} does not exist!")
+
+    file = Dir.entries(dir).select do |f|
+                     Language::EXTENSION_MAP.any? do |suf|
+                       f.end_with?(suf)
+                     end
+                   end.find { |f| f.split('.')[-2].chars.last.to_i == part }
+
+    return nil if file.nil?
+
+    File.join(dir, file)
   end
 
   def compile(lang, binary_dir, solution_file)
@@ -78,7 +104,7 @@ module Commands
     compile_command.gsub!('%%SRC_FILE%%', solution_file)
 
     lib_files = ''
-    $LIB_FILES.each do |file| 
+    $LIB_FILES.each do |file|
       lib_files += " #{file}"
     end
 
@@ -89,32 +115,31 @@ module Commands
 
     output = `#{compile_command}`
 
-    if $?.success? 
+    if $?.success?
       info 'Compilation successful!'.green!
-      return true
+      true
     else
       warn "#{'Compilation failed!'.red!}\n#{output}"
-      return false
+      false
     end
   end
 
-
   def present_run(year, day, out1, out2, time1, time2)
     truncated = false
-    [out1, out2].each_with_index do |out, index| 
+    [out1, out2].each_with_index do |out, index|
       next if out.nil?
 
       out = out.split("\n")
-      
+
       truncated = true if out.size > 1
-      out = out.empty? ? '' : out.last 
+      out = out.empty? ? '' : out.last
       truncated = true if out.visible_length > 67
       out = "#{out[0, 64]}#{'...'.red!}" if out.visible_length > 67
 
-      if index == 0 
+      if index == 0
         out1 = out
         Metadata.cache_results(year, day, out1, nil) unless truncated
-      else 
+      else
         out2 = out
         Metadata.cache_results(year, day, nil, out2) unless truncated
       end
@@ -125,10 +150,12 @@ module Commands
     table_right = '+-------------+'
     seperator_row = table_left + table_center + table_right
 
-    warn 'Your output has been truncated. Run with `aoc run-raw` to get raw stdout without the pretty formatting.' if truncated
+    if truncated
+      warn 'Your output has been truncated. Run with `aoc run-raw` to get raw stdout without the pretty formatting.'
+    end
 
     puts '-' * seperator_row.length
-    info "Run results for Year #{year}, Day #{day}" 
+    info "Run results for Year #{year}, Day #{day}"
     puts ''
 
     puts seperator_row
@@ -139,7 +166,7 @@ module Commands
       next if out.nil?
 
       exec_time = "#{(time * 1000).round(2)} ms"
-      print "|  #{pt.to_s}     |"
+      print "|  #{pt}     |"
       print "  #{out}#{' ' * (table_center.length - out.visible_length - 2)}"
       puts "|  #{exec_time}#{' ' * (table_right.length - exec_time.length - 4)}|"
       puts seperator_row

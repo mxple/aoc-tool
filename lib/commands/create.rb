@@ -46,7 +46,7 @@ module Commands
     create_puzzle.join()
     create_input.join()
 
-    Metadata.set_last_puzzle(year, day)
+    Metadata.set_last_puzzle(year, day, lang_code)
 
     # create solution file
     solution_path = build_solution_dir(year, day)
@@ -141,9 +141,14 @@ module Commands
 
   def parse_html_to_md(html)
     result = ''
-    parts = html.extract_main.extract_articles
-    parts.each do |part|
-      part[0]
+
+    html_parser = Parser.new(html)
+
+    html_parser
+      .extract_main!
+      .extract_articles
+      .each do |part|
+      part = Parser.new(part)
         .replace_paragraph_md!
         .replace_header_md!
         .replace_links_md!
@@ -154,7 +159,7 @@ module Commands
         .replace_list_md!
         .remove_easter_eggs!
 
-      result += part[0]
+      result += part.get_str
       result += "\n"
     end
     result

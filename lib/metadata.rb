@@ -21,9 +21,9 @@ module Metadata
     part == 1 ? @meta['p1cache'] : @meta['p2cache']
   end
 
-  def self.set_last_puzzle(year, day)
+  def self.set_last_puzzle(year, day, lang_code)
     @meta = deserialize
-    @meta['last_puzzle'] = "#{year},#{day}"
+    @meta['last_puzzle'] = "#{year},#{day},#{lang_code}"
     serialize
   end
 

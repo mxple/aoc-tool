@@ -1,4 +1,3 @@
-# year day etc
 def parse_problem(argv)
   error("Too many arguments!\n#{$HELP_MSG}") if argv.length > 4
 
@@ -202,82 +201,4 @@ class String
     gsub(/\e\[[0-9;]*m/, '').length
   end
 
-  # html parse methods
-  def replace_links_md!
-    regex = /<a href=[^>]+>([^<]+)<\/a>/
-    self.gsub!(regex) do |m| "[#{regex.match(m)[1]}]"; end
-    self
-  end
-  
-  def replace_header_md!
-    regex = /<h2.*?>([\S\s]+?)<\/h2>/
-    self.gsub!(regex) do |m| "## #{regex.match(m)[1]}"; end
-    self
-  end
-
-  def replace_paragraph_md!
-    regex = /<p>([\S\s]+?)<\/p>/
-    self.gsub!(regex) do |m| "\n#{regex.match(m)[1]}"; end
-    self
-  end
-
-  def replace_block_md!
-    regex = /<pre><code>([\S\s]+?)<\/code><\/pre>/
-    self.gsub!(regex) do |m| "```\n#{regex.match(m)[1]}```"; end
-    self
-  end
-
-  def replace_code_md!
-    regex = /<code>([\S\s]+?)<\/code>/
-    self.gsub!(regex) do |m| "`#{regex.match(m)[1]}`"; end
-    self
-  end
-
-  def replace_glow_md!
-    regex = /<em>([\S\s]+?)<\/em>/
-    self.gsub!(regex) do |m| "**#{regex.match(m)[1]}**"; end
-    self
-  end
-
-  def replace_star_md!
-    regex = /<em class="star">([\S\s]+?)<\/em>/
-    self.gsub!(regex) do |m| "***#{regex.match(m)[1]}***"; end
-    self
-  end
-
-  def replace_list_md!
-    regex = /<ul>([\S\s]+?)<\/ul>/
-    self.gsub!(regex) do |m| regex.match(m)[1] end
-
-    regex = /<li>([\S\s]+?)<\/li>/
-    self.gsub!(regex) do |m| "- #{regex.match(m)[1]}" end
-    self
-  end
-
-  def remove_easter_eggs!
-    regex = /<span[^>]+>([\S\s]+?)<\/span>/
-    self.gsub!(regex) do |m| regex.match(m)[1]; end
-    self
-  end
-
-  def extract_main
-    regex = /<main>([\S\s]+?)<\/main>/
-    regex.match(self)[1].strip
-  end
-
-  def extract_articles
-    regex = /<article[^>]*?>([\S\s]+?)<\/article>/
-    self.scan(regex)
-  end
-
-  def replace_links!
-    regex = /<a href=[^>]+>([^<]+)<\/a>/
-    self.gsub!(regex) do |link| regex.match(link)[1].blue!; end
-    self
-  end
-
-  def replace_stars!
-    self.gsub!("<span class=\"day-success\">one gold star</span>", 'one gold star'.bright_yellow!)
-    self
-  end
 end
