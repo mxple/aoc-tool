@@ -1,7 +1,12 @@
 # aoc-tool
+
 Organize, download, write, test, and submit Advent of Code puzzles from the command line! 
 
 **aoc-tool** offers a language-agnostic way to solve AoC puzzles from the comfort of the terminal. 
+
+***aoc-tool** is a work-in-progress. It is currently useable but not well-tested and not feature-complete*
+
+![aoc_demo](https://github.com/mxple/aoc-tool/assets/83033020/cfac3224-4018-4aa3-8c1e-64e110c3b6a7)
 
 ## Install
 Depends on: Ruby
@@ -10,9 +15,9 @@ From source:
 ```
 $ git clone https://github.com/mxple/aoc-tool  # somewhere safe
 $ cd aoc-tool
-$ ln -s $(pwd)/aoc /usr/bin/aoc
+$ ln -s $(pwd)/bin/aoc.rb /usr/bin/aoc
 ```
-
+<!--
 From AUR:
 ```
 $ yay -S aoc-tool
@@ -22,18 +27,18 @@ From Gems
 ```
 $ gem install aoc-tool
 ```
-
+-->
 Windows people, use WSL until Windows is officially supported :p
 
 ## Getting Started
-Run `aoc config-gen > ~/.config/aoc/config.rb` to generate a sample config file if there is not one already.
+Run `aoc config-gen > ~/.config/aoc/config.rb` to generate a sample config file.
 
 Modify the variables:
 ```
 $SESSION      = 'your_session_cookie'
 $MASTER_DIR   = '/path/to/master/dir'
 $DEFAULT_LANG = 'your favorite language'
-$IDE          = 'your IDE of choice'
+$IDE          = 'command to run ide (see wiki)'
 ```
 That's all the configuration most users will need!
 
@@ -45,14 +50,13 @@ Choose a year to start off with:
 ```
 $ aoc init-year 2023 aoc2023  # creates master_dir/aoc2023 and some metadata
 ```
-Download a puzzle, its test cases, create solution files from templates, and open an IDE:
+Download a puzzle, sets up work space, and open an IDE:
 ```
 $ aoc create 2023 1 rust
 ```
 Happy coding! Once you finish a solution, you can run it like so:
 ```
 $ aoc run   # run specified puzzle or last init-ed puzzle
-$ aoc test  # run the solution on test cases
 ```
 Runs are language agnostic! If your language isn't automatically supported, you can add support in the config file.
 
@@ -87,8 +91,7 @@ Run `aoc` to download, edit, and run files from any directory:
 ```
 $ pwd
 /usr/bin      # be literally anywhere in your file system
-$ aoc init    # download latest puzzle and have your IDE automatically called on the solution files
-$ aoc test    # run latest puzzle solutions on custom test cases
+$ aoc init    # download latest puzzle and have your IDE automatically called on the puzzle
 $ aoc run     # compile/interpret and run on input data
 $ aoc submit  # submit latest run result to corresponding puzzle
 ```
