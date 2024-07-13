@@ -80,7 +80,7 @@ module Metadata
 
   def check_metafile_exists
     if !Dir.exist?($MASTER_DIR) || !File.exist?(File.join($MASTER_DIR, '.aoc'))
-      error("Master directory is not initialized! Initialize with `aoc master-init`") 
+      error("Master directory is not initialized! Initialize with `aoc init-master`") 
     end
   end
 

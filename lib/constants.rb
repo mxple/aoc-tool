@@ -37,6 +37,12 @@ Language.add(
   run_cmd = '%%RUN_FILE_PATH%%'
 )
 Language.add(
+  etc        = 'haskell',
+  extension   = 'hs',
+  compile_cmd = 'ghc-9.4 -o %%BIN_DIR%%/a.out %%SRC_FILE%% %%LIB_FILES%%',
+  run_cmd = '%%RUN_FILE_PATH%%'
+)
+Language.add(
   etc        = 'java',
   extension   = 'java',
   compile_cmd = 'javac -d %%BIN_DIR%%/ %%SRC_FILE%%', # TODO: figure out lib files with java
@@ -71,12 +77,6 @@ Language.add(
   extension   = 'pl',
   compile_cmd = nil,
   run_cmd = 'perl %%RUN_FILE_PATH%%'
-)
-Language.add(
-  etc        = 'haskell',
-  extension   = 'hs',
-  compile_cmd = nil,
-  run_cmd = 'runhaskell %%RUN_FILE_PATH%%'
 )
 Language.add(
   etc        = 'go',
