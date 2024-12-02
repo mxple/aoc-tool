@@ -20,6 +20,6 @@ module Commands
 
     # update master dir .aoc file
     # TODO: decereal and cerealize
-    $MASTER_DIR && File.open(File.join($MASTER_DIR, '.aoc'), 'a').write("\n#{year}:#{name}")
+    $MASTER_DIR && File.open(File.join($MASTER_DIR, '.aoc'), 'a').write("\n#{year}:#{etc}")
   end
 end

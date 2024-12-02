@@ -38,6 +38,23 @@ module Commands
     article_parser = Parser.new(html_parser.extract_main!.extract_articles[0])
 
     puts article_parser.replace_paragraph_md!.replace_links!.replace_stars!.replace_guess!.get_str
+    # update for part 2
+    return if day == 2
+    puzzle_file_dir  = build_puzzle_dir(year, day)
+    puzzle_file_path = build_puzzle_file(year, day)
+
+    create_puzzle = Thread.new do
+      puzzle = parse_html_to_md get_puzzle(day, year)
+      
+      # create puzzle file
+      FileUtils.mkdir_p(puzzle_file_dir)
+      f = File.new(puzzle_file_path, 'w')
+      f.write(puzzle)
+      f.flush
+      f.close
+
+      info "Puzzle written to #{puzzle_file_path}"
+    end
   end
 
   module_function

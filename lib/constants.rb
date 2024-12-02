@@ -3,7 +3,7 @@ $HELP_MSG = "\e[1m\e[4mUsage: aoc <COMMAND> [ARGS]\e[0m:
   \e[1m\e[4mr\e[0m\e[1mun\e[0m       [year] [day] [part]   Run your solution on the input.
   \e[1m\e[4mc\e[0m\e[1mreate\e[0m    [year] [day] [lang]   Download a puzzle and set up the workspace.
   \e[1m\e[4ms\e[0m\e[1mubmit\e[0m    [year] [day] [ans]    Submit a solution to a puzzle.
-  \e[1m\e[4mt\e[0m\e[1mest\e[0m      [year] [day] [part]   Run your solution on test cases.
+  \e[1m\e[4me\e[0m\e[1mdit\e[0m      [year] [day] [part]   Edit a solution
 
 \e[1m\e[4mSetup Commands\e[0m:
   \e[1minit-year\e[0m    <year> <dir_name>  Creates a year directory.

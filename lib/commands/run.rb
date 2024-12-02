@@ -44,6 +44,7 @@ module Commands
 
     aoc_input = File.read(input_file)
     ENV['AOC_INPUT'] = aoc_input if $USE_ENV_INPUT
+    ENV['AOC_INPUT_PATH'] = input_file
 
     # prepare run command
     run_cmd = build_run_cmd(binary_dir, solution_file, input_file, lang)
